@@ -33,3 +33,4 @@ C:\Users\USER\Downloads\Backend\BlogAPI\obj\Debug\net9.0\refint\BlogAPI.dll
 C:\Users\USER\Downloads\Backend\BlogAPI\obj\Debug\net9.0\BlogAPI.pdb
 C:\Users\USER\Downloads\Backend\BlogAPI\obj\Debug\net9.0\BlogAPI.genruntimeconfig.cache
 C:\Users\USER\Downloads\Backend\BlogAPI\obj\Debug\net9.0\ref\BlogAPI.dll
+C:\Users\USER\Downloads\Backend\BlogAPI\obj\Debug\net9.0\BlogAPI.sourcelink.json

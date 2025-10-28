@@ -1,3 +1,7 @@
+using BlogAPI.Models;
+using BlogAPI.Persistence.Interface;
+using BlogAPI.Persistence.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 
 var app = builder.Build();
 
@@ -16,5 +22,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();

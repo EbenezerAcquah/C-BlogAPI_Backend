@@ -1,5 +1,6 @@
 using BlogAPI.Models;
 using BlogAPI.Models.DTOs;
+using BlogAPI.Persistence.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogAPI.Controllers;
@@ -8,7 +9,12 @@ namespace BlogAPI.Controllers;
 [Route("api/[controller]")]
 public class BlogController : ControllerBase
 {
-    private static readonly List<Blog> _blogList = new List<Blog>();
+    private readonly IBlogRepository _blogRepository;
+    public BlogController(IBlogRepository blogRepository)
+    {
+        _blogRepository = blogRepository;
+    }
+    
     [HttpPost]
     public IActionResult CreateBlog(CreateBlogRequestDTO request)
     {
@@ -19,19 +25,19 @@ public class BlogController : ControllerBase
             Content = request.Content,
         };
 
-        _blogList.Add(blog);
+        _blogRepository.Add(blog);
         return Ok(blog);
     }
     [HttpGet]
     public IActionResult GetAllBlogs()
     {
-        return Ok(_blogList);
+        return Ok(_blogRepository.GetAll());
     }
 
     [HttpGet("{id}")]
     public IActionResult GetBlogById(Guid id)
     {
-        var blog = _blogList.FirstOrDefault(b => b.Id == id);
+        var blog = _blogRepository.GetById(id);
         if (blog == null)
         {
             return NotFound();
@@ -42,36 +48,31 @@ public class BlogController : ControllerBase
 [HttpPut("{id}")]
 public IActionResult UpdateBlog(Guid id, UpdateBlogRequestDTO request)
 {
-    var blog = _blogList.FirstOrDefault(b => b.Id == id);
-    if (blog == null)
+    var blog = new Blog
+    {
+        Author = request.Author,
+        Title = request.Title,
+        Content = request.Content,
+    };
+
+    var updatedBlog = _blogRepository.Update(id, blog);
+    if (updatedBlog == null)
     {
         return NotFound();
     }
 
-    blog.Title = request.Title ?? blog.Title;
-    blog.Content = request.Content ?? blog.Content;
-    blog.Author = request.Author ?? blog.Author;
-
-    return Ok(blog);
+    return Ok(updatedBlog);
 }
 
 [HttpDelete("{id}")]
 public IActionResult DeleteBlogById(Guid id)
 {
-    var blog = _blogList.FirstOrDefault(b => b.Id == id);
+    var blog = _blogRepository.DeleteById(id);
     if (blog == null)
     {
         return NotFound();
     }
 
-    _blogList.Remove(blog);
     return Ok(new { message = "Blog deleted successfully." });
-}
-
-[HttpDelete]
-public IActionResult DeleteAllBlogs()
-{
-    _blogList.Clear();
-    return Ok(new { message = "All blogs deleted successfully." });
 }
 }

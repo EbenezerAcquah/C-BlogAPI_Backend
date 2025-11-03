@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+builder.Services.AddSingleton<IBlogRepository, BlogRepository>();
 
 var app = builder.Build();
 
